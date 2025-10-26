@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>📨 رسالة لك</title>
+  <style>
+    body {
+      font-family: "Tajawal", sans-serif;
+      background: #f7f9fc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+    }
+    textarea {
+      width: 100%;
+      height: 140px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      padding: 10px;
+      font-size: 16px;
+      resize: none;
+      outline: none;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      background: #007bff;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #link {
+      margin-top: 10px;
+      font-size: 15px;
+      word-break: break-all;
+      background: #f1f1f1;
+      padding: 8px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="mainBox">
+    <h2>✏️ اكتب رسالة</h2>
+    <textarea id="message" placeholder="اكتب رسالتك هنا..."></textarea>
+    <button onclick="createLink()">إنشاء رابط</button>
+    <div id="link"></div>
+  </div>
+
+  <script>
+    const baseURL = window.location.origin + window.location.pathname;
+
+    // إذا كان الرابط يحتوي على رسالة
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("m")) {
+      const msg = decodeURIComponent(atob(params.get("m")));
+      document.body.innerHTML = `
+        <div class='container'>
+          <h2>📩 الرسالة:</h2>
+          <p style='white-space: pre-wrap; font-size:17px;'>${msg}</p>
+        </div>`;
+    }
+
+    // توليد رابط يحتوي الرسالة
+    function createLink() {
+      const msg = document.getElementById("message").value.trim();
+      if (!msg) return alert("اكتب الرسالة أولا!");
+      const encoded = btoa(encodeURIComponent(msg)); // تشفير الرسالة
+      const link = `${baseURL}?m=${encoded}`;
+      document.getElementById("link").innerHTML =
+        `<p>📎 انسخ هذا الرابط:</p><textarea readonly>${link}</textarea>`;
+    }
+  </script>
+</body>
+</html>
